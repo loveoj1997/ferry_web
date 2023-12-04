@@ -1,0 +1,202 @@
+diff a/src/views/process/list/customers-list.vue b/src/views/process/list/customers-list.vue	(rejected hunks)
+@@ -2,34 +2,39 @@
+-    <div class="app-container">
+-      <el-card class="box-card remove-padding-bottom">
+-        <el-form ref="listQuery" :model="listQuery" :inline="true">
+-          <el-form-item label="流程名称">
+-            <el-input
+-              v-model="listQuery.name"
+-              placeholder="请输入流程名称"
+-              clearable
+-              size="small"
+-              style="width: 240px"
+-              @keyup.enter.native="handleQuery"
+-            />
+-          </el-form-item>
+-          <el-form-item>
+-            <el-button type="primary" icon="el-icon-search" size="small" @click="handleQuery">搜索</el-button>
+-          </el-form-item>
+-        </el-form>
+-  
+-        <div v-for="item in processLists" :key="item.id">
+-          <div v-if="item.process_list.length!==0">
+-            <div class="workflow-classify-title">
+-              {{ item.name }}
+-            </div>
+-            <div style="margin-bottom: 15px;">
+-              <template v-for="(buttonItem, buttonIndex) in item.process_list">
+-                <el-tooltip :key="buttonItem.id" effect="dark" placement="top">
+-                  <div slot="content">
+-                    {{ buttonItem.name }}
+-                    <br>
+-                    {{ buttonItem.remarks }}
+-                  </div>
+-                  <div
+-                    class="workflow-classify-div"
+-                    :style="(buttonIndex + 1) % 5 === 0 ? {'padding-right': 0} : {'padding-right': '12px'}"
++  <div class="app-container">
++    <el-card class="box-card remove-padding-bottom">
++      <el-form ref="listQuery" :model="listQuery" :inline="true">
++        <el-form-item label="流程名称">
++          <el-input
++            v-model="listQuery.name"
++            placeholder="请输入流程名称"
++            clearable
++            size="small"
++            style="width: 240px"
++            @keyup.enter.native="handleQuery"
++          />
++        </el-form-item>
++        <el-form-item>
++          <el-button type="primary" icon="el-icon-search" size="small" @click="handleQuery">搜索</el-button>
++        </el-form-item>
++      </el-form>
++
++      <div v-for="item in processLists" :key="item.id">
++        <div v-if="item.process_list.length!==0">
++          <div class="workflow-classify-title">
++            {{ item.name }}
++          </div>
++          <div style="margin-bottom: 15px;">
++            <template v-for="(buttonItem, buttonIndex) in item.process_list">
++              <el-tooltip :key="buttonItem.id" effect="dark" placement="top">
++                <div slot="content">
++                  {{ buttonItem.name }}
++                  <br>
++                  {{ buttonItem.remarks }}
++                </div>
++                <div
++                  class="workflow-classify-div"
++                  :style="(buttonIndex + 1) % 5 === 0 ? {'padding-right': 0} : {'padding-right': '12px'}"
++                >
++                  <el-button
++                    style="width: 100%"
++                    plain
++                    @click="submitWorkOrder(buttonItem.id)"
+@@ -37,8 +42,7 @@
+-                    <el-button
+-                      style="width: 100%"
+-                      plain
+-                      @click="submitWorkOrder(buttonItem.id)"
+-                    >
+-                      <div class="process-button-div">
+-                        <div class="process-div-icon">
+-                          <e-icon class="process-div-el-icon" :icon-name="buttonItem.icon" />
++                    <div class="process-button-div">
++                      <div class="process-div-icon">
++                        <e-icon class="process-div-el-icon" :icon-name="buttonItem.icon" />
++                      </div>
++                      <div class="process-div-body">
++                        <div class="process-div-title ellipsis">
++                          {{ buttonItem.name }}
+@@ -46,7 +50,2 @@
+-                        <div class="process-div-body">
+-                          <div class="process-div-title ellipsis">
+-                            {{ buttonItem.name }}
+-                          </div>
+-                          <div class="process-div-remarks ellipsis">
+-                            {{ buttonItem.remarks }}
+-                          </div>
++                        <div class="process-div-remarks ellipsis">
++                          {{ buttonItem.remarks }}
+@@ -55,5 +54,5 @@
+-                    </el-button>
+-                  </div>
+-                </el-tooltip>
+-              </template>
+-            </div>
++                    </div>
++                  </el-button>
++                </div>
++              </el-tooltip>
++            </template>
+@@ -62,14 +61,24 @@
+-      </el-card>
+-    </div>
+-  </template>
+-  
+-  <script>
+-  import { classifyProcessList } from '@/api/process/admin/process'
+-  
+-  export default {
+-    name: 'CustomersList',
+-    data() {
+-      return {
+-        processLists: [],
+-        listQuery: {}
+-      }
++      </div>
++    </el-card>
++  </div>
++</template>
++
++<script>
++import { classifyProcessList } from '@/api/process/admin/process'
++
++export default {
++  name: 'CustomersList',
++  data() {
++    return {
++      processLists: [],
++      listQuery: {}
++    }
++  },
++  created() {
++    this.getProcessList()
++  },
++  methods: {
++    getProcessList() {
++      classifyProcessList(this.listQuery).then(response => {
++        this.processLists = response.data
++      })
+@@ -77 +86 @@
+-    created() {
++    handleQuery() {
+@@ -80,12 +89,2 @@
+-    methods: {
+-      getProcessList() {
+-        classifyProcessList(this.listQuery).then(response => {
+-          this.processLists = response.data
+-        })
+-      },
+-      handleQuery() {
+-        this.getProcessList()
+-      },
+-      submitWorkOrder(processId) {
+-        this.$router.push({ path: '/process/create-ticket', query: { processId: processId }})
+-      }
++    submitWorkOrder(processId) {
++      this.$router.push({ path: '/process/create-ticket', query: { processId: processId }})
+@@ -94,2 +93,3 @@
+-  </script>
+-  
++}
++</script>
++
+@@ -101 +101 @@
+-  
++
+@@ -108 +108 @@
+-  
++
+@@ -112 +112 @@
+-  
++
+@@ -117 +117 @@
+-  
++
+@@ -124 +124 @@
+-  
++
+@@ -130 +130 @@
+-  
++
+@@ -137 +137 @@
+-  
++
+@@ -145 +145 @@
+-  
++
+@@ -151 +151 @@
+-  
++

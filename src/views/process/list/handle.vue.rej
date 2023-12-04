@@ -1,0 +1,4 @@
+diff a/src/views/process/list/handle.vue b/src/views/process/list/handle.vue	(rejected hunks)
+@@ -104 +104 @@
+-          <div> 
++          <div>
