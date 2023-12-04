@@ -101,6 +101,17 @@
               show-word-limit
             />
           </div>
+          <div>
+            <!-- 这里加一个if判断，当已接单后再展示 -->
+            <el-input
+              v-model="howToFix"
+              type="textarea"
+              placeholder="请输入解决方案说明"
+              maxlength="300"
+              :autosize="{ minRows: 3, maxRows: 99}"
+              show-word-limit
+            />
+          </div>
           <div class="text item" style="text-align: center;margin-top:18px">
             <div
               v-if="isActiveProcessing && currentNode.activeOrder"
