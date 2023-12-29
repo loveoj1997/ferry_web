@@ -30,69 +30,7 @@
         <div class="login-main">
           <div class="login-title"> 用户登录 </div>
           <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" autocomplete="on" label-position="left">
-            <el-form-item prop="username">
-              <span class="svg-container">
-                <i class="el-icon-user" />
-              </span>
-              <el-input
-                ref="username"
-                v-model="loginForm.username"
-                placeholder="用户名"
-                name="username"
-                type="text"
-                tabindex="1"
-                autocomplete="on"
-              />
-            </el-form-item>
-
-            <el-tooltip v-model="capsTooltip" content="Caps lock is On" placement="right" manual>
-              <el-form-item prop="password">
-                <span class="svg-container">
-                  <svg-icon icon-class="password" />
-                </span>
-                <el-input
-                  :key="passwordType"
-                  ref="password"
-                  v-model="loginForm.password"
-                  :type="passwordType"
-                  placeholder="密码"
-                  name="password"
-                  tabindex="2"
-                  autocomplete="on"
-                  @keyup.native="checkCapslock"
-                  @blur="capsTooltip = false"
-                  @keyup.enter.native="handleLogin"
-                />
-                <span class="show-pwd" @click="showPwd">
-                  <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
-                </span>
-              </el-form-item>
-            </el-tooltip>
-            <template v-if="isVerifyCodeTmp">
-              <el-form-item prop="code" style="width: 66%;float: left; margin-bottom: 13px">
-                <span class="svg-container">
-                  <svg-icon icon-class="validCode" />
-                </span>
-                <el-input
-                  ref="username"
-                  v-model="loginForm.code"
-                  placeholder="验证码"
-                  name="username"
-                  type="text"
-                  tabindex="3"
-                  maxlength="5"
-                  autocomplete="off"
-                  style=" width: 75%;"
-                  @keyup.enter.native="handleLogin"
-                />
-              </el-form-item>
-              <div class="login-code" style="cursor:pointer; width: 30%;height: 48px;float: right;background-color: #f0f1f5;">
-                <img style="height: 48px;width: 100%;border: 1px solid rgba(0,0,0, 0.1);border-radius:5px;" :src="codeUrl" @click="getCode">
-              </div>
-            </template>
-            <div prop="code" style="width: 100%;float: left;margin-bottom: 13px">
-              <el-checkbox v-model="isLdapTmp">LDAP登陆</el-checkbox>
-            </div>
+            <div prop="code" style="width: 100%;float: left;margin-bottom: 13px" />
             <el-button :loading="loading" type="primary" style="width:100%;padding:12px 20px;margin-bottom:30px;" @click.native.prevent="handleLogin">
               <span v-if="!loading">登 录</span>
               <span v-else>登 录 中...</span>
@@ -181,6 +119,7 @@ export default {
     this.getCurrentTime()
   },
   mounted() {
+    console.log(this.$route)
     if (this.loginForm.username === '') {
       this.$refs.username.focus()
     } else if (this.loginForm.password === '') {
@@ -224,29 +163,30 @@ export default {
       })
     },
     handleLogin() {
-      this.$refs.loginForm.validate(valid => {
-        if (valid) {
-          if (this.isLdapTmp) {
-            this.loginForm.loginType = 1
-          } else {
-            this.loginForm.loginType = 0
-          }
+      // this.$refs.loginForm.validate(valid => {
+      //   if (valid) {
+      //     if (this.isLdapTmp) {
+      //       this.loginForm.loginType = 1
+      //     } else {
+      //       this.loginForm.loginType = 0
+      //     }
 
-          this.loading = true
-          this.$store.dispatch('user/login', this.loginForm)
-            .then(() => {
-              // this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
-              this.$router.push({ path: '/' })
-              this.loading = false
-            })
-            .catch(() => {
-              this.loading = false
-              this.getCode()
-            })
-        } else {
-          return false
-        }
-      })
+      //     this.loading = true
+      //     this.$store.dispatch('user/login', this.loginForm)
+      //       .then(() => {
+      //         // this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
+      //         this.$router.push({ path: '/' })
+      //         this.loading = false
+      //       })
+      //       .catch(() => {
+      //         this.loading = false
+      //         this.getCode()
+      //       })
+      //   } else {
+      //     return false
+      //   }
+      // })
+      window.location.href = 'https://login.dingtalk.com/oauth2/auth?%20redirect_uri=http%3A%2F%2Flocalhost%3A9527%2Fauth-redirect%20&response_type=code%20&client_id=dingjcmk39kdqhrxkxnl&scope=openid%20&state=dddd%20&prompt=consent'
     },
     getOtherQuery(query) {
       return Object.keys(query).reduce((acc, cur) => {
